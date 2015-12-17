@@ -11,6 +11,11 @@
         <link href="{{ FEED_DOMAIN }}/{{ FEED_ALL_RSS }}" type="application/rss+xml" rel="alternate" title="{{ SITENAME }} RSS Feed" />
         {% endif %}
 
+        {% if LOGO %}
+        <link rel="shortcut icon" href="{{ SITEURL }}/{{ LOGO }}" />
+        {% endif %}
+
+
         <!--[if IE]>
             <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
