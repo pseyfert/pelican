@@ -51,6 +51,7 @@ DEFAULT_CONFIG = {
     'FEED_MAX_ITEMS': '',
     'SITEURL': '',
     'SITENAME': 'A Pelican Blog',
+    'LOGO': None,
     'DISPLAY_PAGES_ON_MENU': True,
     'DISPLAY_CATEGORIES_ON_MENU': True,
     'DOCUTILS_SETTINGS': {},
