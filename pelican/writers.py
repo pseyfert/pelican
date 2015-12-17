@@ -32,10 +32,12 @@ class Writer(object):
     def _create_new_feed(self, feed_type, context):
         feed_class = Rss201rev2Feed if feed_type == 'rss' else Atom1Feed
         sitename = Markup(context['SITENAME']).striptags()
+        logo = context.get("LOGO",None)
         feed = feed_class(
             title=sitename,
             link=(self.site_url + '/'),
             feed_url=self.feed_url,
+            image=logo,
             description=context.get('SITESUBTITLE', ''))
         return feed
 
