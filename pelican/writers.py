@@ -40,6 +40,7 @@ class Writer(object):
             title=Markup(feed_title).striptags(),
             link=(self.site_url + '/'),
             feed_url=self.feed_url,
+            image=context.get('LOGO', None),
             description=context.get('SITESUBTITLE', ''))
         return feed
 

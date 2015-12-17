@@ -201,6 +201,10 @@ Basic settings
 
    Your site name
 
+.. data:: LOGO = None
+
+   A favicon for the website and the RSS feeds.
+
 .. data:: SITEURL
 
    Base URL of your website. Not defined by default, so it is best to specify

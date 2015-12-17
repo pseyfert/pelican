@@ -52,6 +52,7 @@ DEFAULT_CONFIG = {
     'RSS_FEED_SUMMARY_ONLY': True,
     'SITEURL': '',
     'SITENAME': 'A Pelican Blog',
+    'LOGO': None,
     'DISPLAY_PAGES_ON_MENU': True,
     'DISPLAY_CATEGORIES_ON_MENU': True,
     'DOCUTILS_SETTINGS': {},
