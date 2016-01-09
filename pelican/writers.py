@@ -29,7 +29,7 @@ class Writer(object):
         self._written_files = set()
         self._overridden_files = set()
 
-    def _create_new_feed(self, feed_type, context):
+    def _create_new_feed(self, feed_type, context, description):
         feed_class = Rss201rev2Feed if feed_type == 'rss' else Atom1Feed
         sitename = Markup(context['SITENAME']).striptags()
         logo = context.get("LOGO",None)
@@ -38,7 +38,7 @@ class Writer(object):
             link=(self.site_url + '/'),
             feed_url=self.feed_url,
             image=logo,
-            description=context.get('SITESUBTITLE', ''))
+            description=description)
         return feed
 
     def _add_item_to_the_feed(self, feed, item):
@@ -81,7 +81,7 @@ class Writer(object):
         self._written_files.add(filename)
         return open(filename, 'w', encoding=encoding)
 
-    def write_feed(self, elements, context, path=None, feed_type='atom'):
+    def write_feed(self, elements, context, path=None, feed_type='atom', description=""):
         """Generate a feed with the list of articles provided
 
         Return the feed. If no path or output_path is specified, just
@@ -101,7 +101,7 @@ class Writer(object):
         self.feed_domain = context.get('FEED_DOMAIN')
         self.feed_url = '{}/{}'.format(self.feed_domain, path)
 
-        feed = self._create_new_feed(feed_type, context)
+        feed = self._create_new_feed(feed_type, context, description)
 
         max_items = len(elements)
         if self.settings['FEED_MAX_ITEMS']:

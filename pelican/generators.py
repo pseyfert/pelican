@@ -276,11 +276,13 @@ class ArticlesGenerator(CachingGenerator):
 
         if self.settings.get('FEED_ATOM'):
             writer.write_feed(self.articles, self.context,
-                              self.settings['FEED_ATOM'])
+                              self.settings['FEED_ATOM'],
+                              description=self.context.get('SITESUBTITLE', ''))
 
         if self.settings.get('FEED_RSS'):
             writer.write_feed(self.articles, self.context,
-                              self.settings['FEED_RSS'], feed_type='rss')
+                              self.settings['FEED_RSS'], feed_type='rss',
+                              description=self.context.get('SITESUBTITLE', ''))
 
         if (self.settings.get('FEED_ALL_ATOM')
                 or self.settings.get('FEED_ALL_RSS')):
@@ -291,36 +293,43 @@ class ArticlesGenerator(CachingGenerator):
 
             if self.settings.get('FEED_ALL_ATOM'):
                 writer.write_feed(all_articles, self.context,
-                                  self.settings['FEED_ALL_ATOM'])
+                                  self.settings['FEED_ALL_ATOM'],
+                                  description=self.context.get('SITESUBTITLE', ''))
 
             if self.settings.get('FEED_ALL_RSS'):
                 writer.write_feed(all_articles, self.context,
                                   self.settings['FEED_ALL_RSS'],
-                                  feed_type='rss')
+                                  feed_type='rss',
+                                  description=self.context.get('SITESUBTITLE', ''))
 
         for cat, arts in self.categories:
+            some_cat = cat
             arts.sort(key=attrgetter('date'), reverse=True)
             if self.settings.get('CATEGORY_FEED_ATOM'):
                 writer.write_feed(arts, self.context,
                                   self.settings['CATEGORY_FEED_ATOM']
-                                  % cat.slug)
+                                  % cat.slug,
+                                  description="FIXME")
 
             if self.settings.get('CATEGORY_FEED_RSS'):
                 writer.write_feed(arts, self.context,
                                   self.settings['CATEGORY_FEED_RSS']
-                                  % cat.slug, feed_type='rss')
+                                  % cat.slug, feed_type='rss',
+                                  description="FIXME")
 
         for auth, arts in self.authors:
             arts.sort(key=attrgetter('date'), reverse=True)
             if self.settings.get('AUTHOR_FEED_ATOM'):
                 writer.write_feed(arts, self.context,
                                   self.settings['AUTHOR_FEED_ATOM']
-                                  % auth.slug)
+                                  % auth.slug,
+                                  description="FIXME")
 
             if self.settings.get('AUTHOR_FEED_RSS'):
                 writer.write_feed(arts, self.context,
                                   self.settings['AUTHOR_FEED_RSS']
-                                  % auth.slug, feed_type='rss')
+                                  % auth.slug, feed_type='rss',
+                                  description="FIXME")
 
         if (self.settings.get('TAG_FEED_ATOM')
                 or self.settings.get('TAG_FEED_RSS')):
@@ -329,12 +338,14 @@ class ArticlesGenerator(CachingGenerator):
                 if self.settings.get('TAG_FEED_ATOM'):
                     writer.write_feed(arts, self.context,
                                       self.settings['TAG_FEED_ATOM']
-                                      % tag.slug)
+                                      % tag.slug,
+                                      description="FIXME")
 
                 if self.settings.get('TAG_FEED_RSS'):
                     writer.write_feed(arts, self.context,
                                       self.settings['TAG_FEED_RSS'] % tag.slug,
-                                      feed_type='rss')
+                                      feed_type='rss',
+                                      description="FIXME")
 
         if (self.settings.get('TRANSLATION_FEED_ATOM')
                 or self.settings.get('TRANSLATION_FEED_RSS')):
@@ -347,12 +358,14 @@ class ArticlesGenerator(CachingGenerator):
                 if self.settings.get('TRANSLATION_FEED_ATOM'):
                     writer.write_feed(
                         items, self.context,
-                        self.settings['TRANSLATION_FEED_ATOM'] % lang)
+                        self.settings['TRANSLATION_FEED_ATOM'] % lang,
+                        description="")
                 if self.settings.get('TRANSLATION_FEED_RSS'):
                     writer.write_feed(
                         items, self.context,
                         self.settings['TRANSLATION_FEED_RSS'] % lang,
-                        feed_type='rss')
+                        feed_type='rss',
+                        description="")
 
     def generate_articles(self, write):
         """Generate the articles."""
