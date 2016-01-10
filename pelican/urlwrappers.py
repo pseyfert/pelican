@@ -111,12 +111,15 @@ class URLWrapper(object):
 
 
 class Category(URLWrapper):
-    pass
+    def __init__(self, *args, **kwargs):
+        super(Category, self).__init__(*args, **kwargs)
+        self.description = ""
 
 
 class Tag(URLWrapper):
     def __init__(self, name, *args, **kwargs):
         super(Tag, self).__init__(name.strip(), *args, **kwargs)
+        self.description = ""
 
 
 class Author(URLWrapper):

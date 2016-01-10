@@ -303,19 +303,26 @@ class ArticlesGenerator(CachingGenerator):
                                   description=self.context.get('SITESUBTITLE', ''))
 
         for cat, arts in self.categories:
-            some_cat = cat
+            #logger.critical("categories are of type %s",type(cat))
+            import inspect
+            for k,v in inspect.getmembers(type(cat)):
+                #logger.critical("categories has member %s",k)
+                pass
+            break
+
+        for cat, arts in self.categories:
             arts.sort(key=attrgetter('date'), reverse=True)
             if self.settings.get('CATEGORY_FEED_ATOM'):
                 writer.write_feed(arts, self.context,
                                   self.settings['CATEGORY_FEED_ATOM']
                                   % cat.slug,
-                                  description="FIXME")
+                                  description=cat.description)
 
             if self.settings.get('CATEGORY_FEED_RSS'):
                 writer.write_feed(arts, self.context,
                                   self.settings['CATEGORY_FEED_RSS']
                                   % cat.slug, feed_type='rss',
-                                  description="FIXME")
+                                  description=cat.description)
 
         for auth, arts in self.authors:
             arts.sort(key=attrgetter('date'), reverse=True)
@@ -323,13 +330,21 @@ class ArticlesGenerator(CachingGenerator):
                 writer.write_feed(arts, self.context,
                                   self.settings['AUTHOR_FEED_ATOM']
                                   % auth.slug,
-                                  description="FIXME")
+                                  description="")# FIXME
 
             if self.settings.get('AUTHOR_FEED_RSS'):
                 writer.write_feed(arts, self.context,
                                   self.settings['AUTHOR_FEED_RSS']
                                   % auth.slug, feed_type='rss',
-                                  description="FIXME")
+                                  description="")# FIXME
+
+        for tag, arts in self.tags.items():
+            #logger.critical("tags are of type %s",type(tag))
+            import inspect
+            for k,v in inspect.getmembers(type(tag)):
+                #logger.critical("tags have member %s",k)
+                pass
+            break
 
         if (self.settings.get('TAG_FEED_ATOM')
                 or self.settings.get('TAG_FEED_RSS')):
@@ -339,13 +354,13 @@ class ArticlesGenerator(CachingGenerator):
                     writer.write_feed(arts, self.context,
                                       self.settings['TAG_FEED_ATOM']
                                       % tag.slug,
-                                      description="FIXME")
+                                      description=tag.description)
 
                 if self.settings.get('TAG_FEED_RSS'):
                     writer.write_feed(arts, self.context,
                                       self.settings['TAG_FEED_RSS'] % tag.slug,
                                       feed_type='rss',
-                                      description="FIXME")
+                                      description=tag.description)
 
         if (self.settings.get('TRANSLATION_FEED_ATOM')
                 or self.settings.get('TRANSLATION_FEED_RSS')):
@@ -574,6 +589,37 @@ class ArticlesGenerator(CachingGenerator):
                     self.tags[tag].append(article)
             for author in getattr(article, 'authors', []):
                 self.authors[author].append(article)
+
+        # XXX read descriptions from .md files
+        for cat in self.categories:
+            catpath = self.path + "/categories/" + cat.slug + ".md"
+            try:
+                catpage = self.readers.read_file(base_path=self.path, path="categories/"+cat.slug+".md")
+            except:
+                pass
+            else:
+                cat.description = catpage.content
+                               
+            logger.critical("category will be looked up at %s",catpath)
+        for tag in self.tags:
+            tagpath = self.path + "/tags/" + tag.slug + ".md"
+            try:
+                tagpage = self.readers.read_file(base_path=self.path, path="tags/"+tag.slug+".md")
+            except Exception as inst:
+                logger.critical("%s",type(inst))     # the exception instance
+                logger.critical("%s",inst.args)      # arguments stored in .args
+                logger.critical("%s",inst)           # __str__ allows args to be printed directly
+
+                logger.critical("tag could not be read")
+                pass
+            else:
+                tag.description = tagpage.content
+                logger.critical("tag could be read")
+                logger.critical("tag description contains %s",tagpage.content)
+                import inspect
+                for k,v in inspect.getmembers(type(tagpage)):
+                    logger.critical("tag page has member %s",k)
+            logger.critical("tag will be looked up at %s",tagpath)
 
         self.dates = list(self.articles)
         self.dates.sort(key=attrgetter('date'),

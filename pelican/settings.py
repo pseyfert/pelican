@@ -31,7 +31,7 @@ DEFAULT_THEME = os.path.join(os.path.dirname(os.path.abspath(__file__)),
 DEFAULT_CONFIG = {
     'PATH': os.curdir,
     'ARTICLE_PATHS': [''],
-    'ARTICLE_EXCLUDES': [],
+    'ARTICLE_EXCLUDES': ['tags','categories'],
     'PAGE_PATHS': ['pages'],
     'PAGE_EXCLUDES': [],
     'THEME': DEFAULT_THEME,
