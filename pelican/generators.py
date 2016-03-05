@@ -302,13 +302,13 @@ class ArticlesGenerator(CachingGenerator):
                                   feed_type='rss',
                                   description=self.context.get('SITESUBTITLE', ''))
 
-        for cat, arts in self.categories:
-            #logger.critical("categories are of type %s",type(cat))
-            import inspect
-            for k,v in inspect.getmembers(type(cat)):
-                #logger.critical("categories has member %s",k)
-                pass
-            break
+        #for cat, arts in self.categories:
+        #    #logger.critical("categories are of type %s",type(cat))
+        #    import inspect
+        #    for k,v in inspect.getmembers(type(cat)):
+        #        #logger.critical("categories has member %s",k)
+        #        pass
+        #    break
 
         for cat, arts in self.categories:
             arts.sort(key=attrgetter('date'), reverse=True)
@@ -338,13 +338,13 @@ class ArticlesGenerator(CachingGenerator):
                                   % auth.slug, feed_type='rss',
                                   description="")# FIXME
 
-        for tag, arts in self.tags.items():
-            #logger.critical("tags are of type %s",type(tag))
-            import inspect
-            for k,v in inspect.getmembers(type(tag)):
-                #logger.critical("tags have member %s",k)
-                pass
-            break
+        #for tag, arts in self.tags.items():
+        #    #logger.critical("tags are of type %s",type(tag))
+        #    import inspect
+        #    for k,v in inspect.getmembers(type(tag)):
+        #        #logger.critical("tags have member %s",k)
+        #        pass
+        #    break
 
         if (self.settings.get('TAG_FEED_ATOM')
                 or self.settings.get('TAG_FEED_RSS')):
@@ -600,26 +600,21 @@ class ArticlesGenerator(CachingGenerator):
             else:
                 cat.description = catpage.content
                                
-            logger.critical("category will be looked up at %s",catpath)
+            logger.debug("category will be looked up at %s",catpath)
         for tag in self.tags:
             tagpath = self.path + "/tags/" + tag.slug + ".md"
+            logger.debug("tag will be looked up at %s",tagpath)
             try:
                 tagpage = self.readers.read_file(base_path=self.path, path="tags/"+tag.slug+".md")
             except Exception as inst:
-                logger.critical("%s",type(inst))     # the exception instance
-                logger.critical("%s",inst.args)      # arguments stored in .args
-                logger.critical("%s",inst)           # __str__ allows args to be printed directly
-
-                logger.critical("tag could not be read")
+                logger.warning("tag " + tag.slug + " could not be read")
                 pass
             else:
                 tag.description = tagpage.content
-                logger.critical("tag could be read")
-                logger.critical("tag description contains %s",tagpage.content)
-                import inspect
-                for k,v in inspect.getmembers(type(tagpage)):
-                    logger.critical("tag page has member %s",k)
-            logger.critical("tag will be looked up at %s",tagpath)
+                logger.debug("tag " + tag.slug + " read")
+                #import inspect
+                #for k,v in inspect.getmembers(type(tagpage)):
+                #    logger.critical("tag page has member %s",k)
 
         self.dates = list(self.articles)
         self.dates.sort(key=attrgetter('date'),
