@@ -632,6 +632,8 @@ class ArticlesGenerator(CachingGenerator):
             tagpath = self.path + "/tags/" + tag.slug + ".md"
             try:
                 tagpage = self.readers.read_file(base_path=self.path, path="tags/"+tag.slug+".md")
+            except FileNotFoundError:
+                pass
             except Exception as inst:
                 logger.critical("%s", type(inst))     # the exception instance
                 logger.critical("%s", inst.args)      # arguments stored in .args
